@@ -2,8 +2,6 @@
 #ifndef IMAGE_H
 # define IMAGE_H
 
-# include "utilities.h"
-
 typedef struct {
     int red;
     int green;
@@ -24,7 +22,6 @@ struct image_lst_s{
 };
 
 image_lst_t *load_mfa(int fd);
-int put_image_table(t_data *display, image_lst_t *images);
 void free_image_lst(image_lst_t *images);
 
 #endif

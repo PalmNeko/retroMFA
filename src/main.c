@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include "mlx.h"
 #include "utilities.h"
+#include "image.h"
 #include <stdbool.h>
 
 int destroy(t_vars *vars)
 {
-	(void)vars;
+	vars->win = NULL;
+    free_image_lst(vars->img_data);
+	vars->print_row = 0;
 	vars->hasWindow = false;
 	if (vars->index >= vars->argc)
 		vars->exit = true;
@@ -47,6 +50,8 @@ int	main(int argc, char *argv[])
 	mlx_t	mlx;
 	t_vars	vars;
 
+	if (argc == 1)
+		return (fprintf(stderr, "usage: %s mfafiles...\n", argv[0]), 0);
 	mlx = mlx_init();
 	vars.mlx = mlx;
 	vars.win = NULL;
@@ -54,6 +59,8 @@ int	main(int argc, char *argv[])
 	vars.index = 1;
 	vars.argc = argc;
 	vars.argv = argv;
+	vars.img_data = NULL;
+	vars.print_row = 0;
 	vars.hasWindow = false;
 	mlx_loop_hook(vars.mlx, will_exit, &vars);
 	mlx_loop(mlx);
