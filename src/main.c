@@ -6,6 +6,13 @@
 #include "image.h"
 #include <stdbool.h>
 
+__attribute__((destructor))
+static void destructor() {
+    if (system("leaks -q retromfa > /dev/null") != 0)
+		fprintf(stderr, "leaks!\n");
+	return ;
+}
+
 int destroy(t_vars *vars)
 {
 	vars->win = NULL;
@@ -36,8 +43,6 @@ int createWindow(t_vars *vars) {
 int will_exit(t_vars *vars) {
 	if (vars->exit == true)
 	{
-		if (system("leaks -q retromfa > /dev/null") != 0)
-			fprintf(stderr, "leaks!\n");
 		fflush(stdout);
 		exit(0);
 	}

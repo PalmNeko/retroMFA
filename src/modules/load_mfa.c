@@ -58,11 +58,12 @@ image_lst_t *load_mfa(int fd)
             if (width > 0 && height > 0) {
                 new_lst = (image_lst_t *)malloc(sizeof(image_lst_t));
                 if (new_lst == NULL)
-                    return (free_image_lst(images), NULL);
+                    return (free(file_data), free_image_lst(images), NULL);
                 new_lst->next = NULL;
                 new_lst->image = load_image(file_data + index + 16, width, height, type);
                 if (new_lst->image == NULL) {
                     free(new_lst);
+                    free(file_data);
                     free_image_lst(images);
                     return (NULL);
                 }
