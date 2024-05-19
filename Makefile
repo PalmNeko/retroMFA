@@ -13,10 +13,11 @@
 NAME = retromfa
 CC = cc
 CFLAGS += -Wall -Wextra -Werror
-CFLAGS += -MP -MMD
+CFLAGS += -MP -MMD -g -O0
 CFLAGS += -I src/includes -I src/mlx
 LINKFLAGS = $(CFLAGS) -L./src/mlx -lmlx -framework OpenGL -framework AppKit
-SRCS = src/main.c
+SRCS = \
+	src/main.c src/modules/view_mfa.c
 OBJS = $(SRCS:.c=.o)
 DEPENDS = $(SRCS:.c=.d)
 
