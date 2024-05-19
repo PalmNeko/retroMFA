@@ -15,8 +15,7 @@ CC = cc
 CFLAGS += -Wall -Wextra -Werror
 CFLAGS += -MP -MMD
 CFLAGS += -I src/includes -I src/mlx
-CFLAGS += -lmlx
-CFLAGS += -L./src/mlx
+LINKFLAGS = $(CFLAGS) -L./src/mlx -lmlx -framework OpenGL -framework AppKit
 SRCS = src/main.c
 OBJS = $(SRCS:.c=.o)
 DEPENDS = $(SRCS:.c=.d)
@@ -25,8 +24,11 @@ all: $(NAME) $(BONUS_RULE)
 
 -include $(DEPENDS)
 
-$(NAME): $(OBJS)
-	$(CC) $(OBJS) -L./src/mlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+$(NAME): src/mlx/libmlx.a $(OBJS)
+	$(CC) $(OBJS) $(LINKFLAGS) -o $(NAME)
+
+src/mlx/libmlx.a:
+	make --directory src/mlx
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -37,6 +39,7 @@ clean:
 	find . -name "*.out" -delete
 	find . -name "*.d" -delete
 	find . -name "*.o" -delete
+	find . -name "*.a" -delete
 
 fclean: clean
 	$(RM) $(NAME)
