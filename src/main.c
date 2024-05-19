@@ -5,17 +5,12 @@
 #include "utilities.h"
 #include <stdbool.h>
 
-int	close(int keycode, t_vars *vars)
-{
-	(void)keycode;
-	mlx_destroy_window(vars->mlx, vars->win);
-	return (0);
-}
-
 int destroy(t_vars *vars)
 {
 	(void)vars;
 	vars->hasWindow = false;
+	if (vars->index >= vars->argc)
+		vars->exit = true;
 	return(0);
 }
 
@@ -34,8 +29,6 @@ int createWindow(t_vars *vars) {
 }
 
 int will_exit(t_vars *vars) {
-	if (vars->index >= vars->argc)
-		vars->exit = true;
 	if (vars->exit == true)
 	{
 		if (system("leaks -q retromfa > /dev/null") != 0)
