@@ -131,11 +131,11 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
             else { // 6
                 int value = 0;
                 memcpy(&value, pixel_start, 2);
-                image->image[index].red = 8 * (value % 32);
+                image->image[index].blue = 8 * (value % 32);
                 value /= 32;
                 image->image[index].green = 8 * (value % 32);
                 value /= 32;
-                image->image[index].blue = 8 * (value % 32);
+                image->image[index].red = 8 * (value % 32);
             }
         }
     }
