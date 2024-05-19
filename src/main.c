@@ -34,8 +34,8 @@ int createWindow(t_vars *vars) {
 int will_exit(t_vars *vars) {
 	if (vars->exit == true)
 	{
-		system("leaks -q retromfa");
-		printf("test\n");
+		if (system("leaks -q retromfa > /dev/null") != 0)
+			fprintf(stderr, "leaks!\n");
 		fflush(stdout);
 		exit(0);
 	}
@@ -54,7 +54,7 @@ int	main(int argc, char *argv[])
 	vars.mlx = mlx;
 	vars.win = NULL;
 	vars.exit = false;
-	vars.index = 0;
+	vars.index = 1;
 	vars.argc = argc;
 	vars.argv = argv;
 	vars.hasWindow = false;

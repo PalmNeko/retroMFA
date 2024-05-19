@@ -13,7 +13,7 @@
 NAME = retromfa
 CC = cc
 CFLAGS += -Wall -Wextra -Werror
-CFLAGS += -MP -MMD -g -O0 -fsanitize=address
+CFLAGS += -MP -MMD -g -O0
 CFLAGS += -I src/includes -I src/mlx
 LINKFLAGS = $(CFLAGS) -L./src/mlx -lmlx -framework OpenGL -framework AppKit
 SRCS = \
