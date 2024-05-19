@@ -40,11 +40,6 @@ image_lst_t *load_mfa(int fd)
     (void)cnt;
     while (index + 4 < file_size) {
         new_lst = NULL;
-
-        // fprintf(stderr, "%02x ", *(file_data + index));
-        // cnt ++;
-        // if (cnt % 16 == 0)
-            // fprintf(stderr, "\n");
         // 読み込み
         int type;
 
@@ -111,7 +106,6 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
 
     pad_len = (2 - ((pixel_size * width) % 2)) % 2;
     line_size = pixel_size * width + pixel_size * pad_len;
-    // fprintf(stderr, "l: %d %d %d %d\n", line_size, pad_len, width, height);
     image = (image_t *)malloc(sizeof(image_t));
     if (image == NULL)
         return (NULL);
@@ -132,10 +126,8 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
                 image->image[index].blue = *pixel_start;
                 image->image[index].green = *(pixel_start + 1);
                 image->image[index].red = *(pixel_start + 2);
-                // fprintf(stderr, "%02x%02x%02x ", image->image->blue, image->image->green, image->image->red);
             }
-            else { // 6 7 * 16 + 12 = 
-                // pixel_start = file_data + 2 * (y * width + x);
+            else { // 6
                 int value = 0;
                 memcpy(&value, pixel_start, 2);
                 image->image[index].red = 8 * (value % 32);
@@ -145,7 +137,6 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
                 image->image[index].blue = 8 * (value % 32);
             }
         }
-        // fprintf(stderr, "\n");
     }
     file_data = file_data + (line_size * height);
     pad_len = (4 - width % 4) % 4;
@@ -154,12 +145,9 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
             int data_index = y * (width + pad_len) + x;
             int index = y * width + x;
 
-            // image->image[index].alpha = 0xFF;
             unsigned char *pixel_start = file_data + data_index;
             image->image[index].alpha = *pixel_start;
-            // fprintf(stderr, "%02x", *pixel_start);
         }
-        // fprintf(stderr, "\n");
     }
     return image;
 }

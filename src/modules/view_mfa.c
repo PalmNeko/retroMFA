@@ -15,7 +15,7 @@ int view_mfa(t_vars *vars)
     int             fd = 0;
     char            *filename;
 
-	mlx_win = mlx_new_window(vars->mlx, 1920, 1080, "Hello world!");
+	mlx_win = mlx_new_window(vars->mlx, 1920, 1080, vars->argv[vars->index]);
     img.width = 1920;
     img.height = 1080;
     vars->win = mlx_win;

@@ -41,10 +41,8 @@ int put_image(t_data *display, image_t *image, int x, int y)
             color += pixel->green;
             color <<= 8;
             color += pixel->blue;
-            // fprintf(stderr, "%02x%02x%02x%02x ", pixel->alpha, pixel->red, pixel->green, pixel->blue);
             put_pixel(display, x + img_x, y + img_y, color);
         }
-        // fprintf(stderr, "\n");
     }
     return (0);
 }
