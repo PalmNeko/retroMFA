@@ -23,6 +23,8 @@ typedef struct	s_data {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		width;
+	int		height;
 }				t_data;
 
 typedef struct	s_vars {
@@ -39,6 +41,7 @@ typedef struct {
 	t_vars *vars;
 }	t_param;
 
-int view_mfa(t_vars *param);
+int 	view_mfa(t_vars *param);
+void	put_pixel(t_data *data, int x, int y, int color);
 
 #endif
