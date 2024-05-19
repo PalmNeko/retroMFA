@@ -5,19 +5,25 @@
 
 int put_image(t_data *display, image_t *image, int x, int y);
 
-int put_image_table(t_data *display, image_lst_t *images)
+int put_image_table(t_data *display, image_lst_t *images, int start_row)
 {
     int offset_y = 10;
     int offset_x = 10;
     int max_img_height = 0;
+    int row = 0;
 
     while (images != NULL) {
         if (offset_x + images->image->width > display->width) {
-            offset_y += max_img_height + 10;
+            if (row >= start_row)
+                offset_y += max_img_height + 10;
             offset_x = 10;
             max_img_height = 0;
+            row += 1;
         }
-        put_image(display, images->image, offset_x, offset_y);
+        if (offset_y + images->image->height > display->height)
+            break;
+        if (row >= start_row)
+            put_image(display, images->image, offset_x, offset_y);
         if (images->image->height > max_img_height)
             max_img_height = images->image->height;
         offset_x += images->image->width + 10;

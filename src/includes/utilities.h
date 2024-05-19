@@ -51,6 +51,6 @@ typedef struct {
 
 int 	view_mfa(t_vars *param);
 void	put_pixel(t_data *data, int x, int y, int color);
-int		put_image_table(t_data *display, image_lst_t *images);
+int		put_image_table(t_data *display, image_lst_t *images, int start_row);
 
 #endif

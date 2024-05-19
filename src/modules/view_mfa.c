@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -30,7 +31,7 @@ int view_mfa(t_vars *vars)
         return (-1);
     vars->img_data = images;
     put_mfa(vars);
-    mlx_hook(mlx_win, 2, 1L<<0, keypress_event, &vars);
+    mlx_hook(mlx_win, 2, 1L<<0, keypress_event, vars);
     close(fd);
     return (0);
 }
@@ -41,12 +42,13 @@ int put_mfa(t_vars *vars) {
 
     if (vars->win == NULL)
         return (0);
+    mlx_clear_window(vars->mlx, vars->win);
     img.width = 1920;
     img.height = 1080;
     img.img = mlx_new_image(vars->mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
-    put_image_table(&img, vars->img_data);
+    put_image_table(&img, vars->img_data, vars->print_row);
 	mlx_put_image_to_window(vars->mlx, vars->win, img.img, 0, 0);
     mlx_destroy_image(vars->mlx, img.img);
     return (0);
@@ -54,12 +56,15 @@ int put_mfa(t_vars *vars) {
 
 int keypress_event(int keycode, t_vars *param)
 {
-    (void)param;
-    if (keycode && KEY_W != 0) {
-        
+    if (keycode == KEY_W) {
+        if (param->print_row > 0)
+            param->print_row -= 1;
+        put_mfa(param);
     }
-    if (keycode && KEY_S != 0) {
-
+    else if (keycode == KEY_S) {
+        if (param->print_row < INT_MAX)
+            param->print_row += 1;
+        put_mfa(param);
     }
     return (0);
 }
