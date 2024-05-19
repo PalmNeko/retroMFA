@@ -26,14 +26,15 @@ int view_mfa(t_vars *vars)
     fd = open(filename, O_RDONLY);
     if (fd == -1)
         return (-1);
+    errno = 0;
     images = load_mfa(fd);
     if (images == NULL && errno != 0)
-        return (-1);
+        return (-2);
     vars->img_data = images;
     put_mfa(vars);
     mlx_hook(mlx_win, 2, 1L<<0, keypress_event, vars);
     if (close(fd) == -1)
-        return (-1);
+        return (-3);
     return (0);
 }
 

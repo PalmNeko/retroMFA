@@ -25,13 +25,15 @@ int destroy(t_vars *vars)
 }
 
 int createWindow(t_vars *vars) {
+	int	result;
 	if (vars->hasWindow == true)
 		return (0);
-	if (view_mfa(vars) != 0)
+	result = view_mfa(vars);
+	if (result != 0)
 	{
 		if (vars->hasWindow == true)
 			mlx_destroy_window(vars->mlx, vars->win);
-		perror(NULL);
+		fprintf(stderr, "Error\n");
 		exit(0);
 	}
 	mlx_hook(vars->win, ON_DESTROY, 0, destroy, vars);
