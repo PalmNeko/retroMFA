@@ -29,8 +29,6 @@ src/mlx/libmlx.a:
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-install:
-
 clean:
 	find . -name "*.out" -delete
 	find . -name "*.d" -delete
