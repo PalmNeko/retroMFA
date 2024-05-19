@@ -16,15 +16,17 @@ int destroy(t_vars *vars)
 {
 	(void)vars;
 	vars->hasWindow = false;
-	if (vars->index >= vars->argc)
-		vars->exit = true;
 	return(0);
 }
 
 int createWindow(t_vars *vars) {
 	if (vars->hasWindow == true)
 		return (0);
-	view_mfa(vars);
+	if (view_mfa(vars) != 0 && vars->hasWindow)
+	{
+		mlx_destroy_window(vars->mlx, vars->win);
+		exit(0);
+	}
 	mlx_hook(vars->win, ON_DESTROY, 0, destroy, vars);
 	vars->hasWindow = true;
 	vars->index += 1;
@@ -32,6 +34,8 @@ int createWindow(t_vars *vars) {
 }
 
 int will_exit(t_vars *vars) {
+	if (vars->index >= vars->argc)
+		vars->exit = true;
 	if (vars->exit == true)
 	{
 		if (system("leaks -q retromfa > /dev/null") != 0)
