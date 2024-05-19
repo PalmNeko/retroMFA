@@ -5,42 +5,34 @@
 #include "utilities.h"
 #include <stdbool.h>
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-int	close(int keycode, t_param *param)
+int	close(int keycode, t_vars *vars)
 {
 	(void)keycode;
-	mlx_destroy_window(param->vars->mlx, param->vars->win);
+	mlx_destroy_window(vars->mlx, vars->win);
 	return (0);
 }
 
-int destroy(t_param *param)
+int destroy(t_vars *vars)
 {
-	(void)param->vars;
-	param->vars->hasWindow = false;
-	if (param->vars->index >= param->vars->argc)
-		param->vars->exit = true;
+	(void)vars;
+	vars->hasWindow = false;
+	if (vars->index >= vars->argc)
+		vars->exit = true;
 	return(0);
 }
 
-int createWindow(t_param *param) {
-	if (param->vars->hasWindow == true)
+int createWindow(t_vars *vars) {
+	if (vars->hasWindow == true)
 		return (0);
-	view_mfa(param);
-	mlx_hook(param->vars->win, ON_DESTROY, 0, destroy, param);
-	param->vars->hasWindow = true;
-	param->vars->index += 1;
+	view_mfa(vars);
+	mlx_hook(vars->win, ON_DESTROY, 0, destroy, vars);
+	vars->hasWindow = true;
+	vars->index += 1;
 	return (0);
 }
 
-int will_exit(t_param *param) {
-	if (param->vars->exit == true)
+int will_exit(t_vars *vars) {
+	if (vars->exit == true)
 	{
 		system("leaks -q retromfa");
 		printf("test\n");
@@ -48,7 +40,7 @@ int will_exit(t_param *param) {
 		exit(0);
 	}
 	else {
-		createWindow(param);
+		createWindow(vars);
 	}
 	return (0);
 }
@@ -57,7 +49,6 @@ int	main(int argc, char *argv[])
 {
 	mlx_t	mlx;
 	t_vars	vars;
-	t_param	param;
 
 	mlx = mlx_init();
 	vars.mlx = mlx;
@@ -67,8 +58,7 @@ int	main(int argc, char *argv[])
 	vars.argc = argc;
 	vars.argv = argv;
 	vars.hasWindow = false;
-	param.vars = &vars;
-	mlx_loop_hook(vars.mlx, will_exit, &param);
+	mlx_loop_hook(vars.mlx, will_exit, &vars);
 	mlx_loop(mlx);
 	return(0);
 }

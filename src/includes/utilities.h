@@ -39,6 +39,6 @@ typedef struct {
 	t_vars *vars;
 }	t_param;
 
-int view_mfa(t_param *param);
+int view_mfa(t_vars *param);
 
 #endif
