@@ -44,7 +44,7 @@ image_lst_t *load_mfa(int fd)
         // fprintf(stderr, "%02x ", *(file_data + index));
         // cnt ++;
         // if (cnt % 16 == 0)
-        //     fprintf(stderr, "\n");
+            // fprintf(stderr, "\n");
         // 読み込み
         int type;
 
@@ -65,7 +65,7 @@ image_lst_t *load_mfa(int fd)
                 if (new_lst == NULL)
                     return (free_image_lst(images), NULL);
                 new_lst->next = NULL;
-                new_lst->image = load_image(file_data + index + 16, width, height, 0);
+                new_lst->image = load_image(file_data + index + 16, width, height, type);
                 if (new_lst->image == NULL) {
                     free(new_lst);
                     free_image_lst(images);
@@ -108,12 +108,10 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
     else
         pixel_size = 2;
 
-    if (type == 0)
-        pad_len = (2 - ((width) % 2)) % 2;
-    else
-        pad_len = 1;
+
+    pad_len = (2 - ((pixel_size * width) % 2)) % 2;
     line_size = pixel_size * width + pixel_size * pad_len;
-    fprintf(stderr, "l: %d %d %d %d\n", line_size, pad_len, width, height);
+    // fprintf(stderr, "l: %d %d %d %d\n", line_size, pad_len, width, height);
     image = (image_t *)malloc(sizeof(image_t));
     if (image == NULL)
         return (NULL);
@@ -136,7 +134,8 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
                 image->image[index].red = *(pixel_start + 2);
                 // fprintf(stderr, "%02x%02x%02x ", image->image->blue, image->image->green, image->image->red);
             }
-            else { // 6
+            else { // 6 7 * 16 + 12 = 
+                // pixel_start = file_data + 2 * (y * width + x);
                 int value = 0;
                 memcpy(&value, pixel_start, 2);
                 image->image[index].red = 8 * (value % 32);
@@ -152,12 +151,12 @@ image_t *load_image(unsigned char *file_data, int width, int height, int type)
     pad_len = (4 - width % 4) % 4;
     for(int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            // int data_index = y * (width + pad_len) + x;
+            int data_index = y * (width + pad_len) + x;
             int index = y * width + x;
 
-            image->image[index].alpha = 0xFF;
-            // unsigned char *pixel_start = file_data + data_index;
-            // image->image[index].alpha = *pixel_start;
+            // image->image[index].alpha = 0xFF;
+            unsigned char *pixel_start = file_data + data_index;
+            image->image[index].alpha = *pixel_start;
             // fprintf(stderr, "%02x", *pixel_start);
         }
         // fprintf(stderr, "\n");
