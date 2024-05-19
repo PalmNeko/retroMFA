@@ -32,7 +32,8 @@ int view_mfa(t_vars *vars)
     vars->img_data = images;
     put_mfa(vars);
     mlx_hook(mlx_win, 2, 1L<<0, keypress_event, vars);
-    close(fd);
+    if (close(fd) == -1)
+        return (-1);
     return (0);
 }
 

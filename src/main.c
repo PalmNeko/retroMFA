@@ -20,9 +20,10 @@ int destroy(t_vars *vars)
 int createWindow(t_vars *vars) {
 	if (vars->hasWindow == true)
 		return (0);
-	if (view_mfa(vars) != 0 && vars->hasWindow)
+	if (view_mfa(vars) != 0)
 	{
-		mlx_destroy_window(vars->mlx, vars->win);
+		if (vars->hasWindow == true)
+			mlx_destroy_window(vars->mlx, vars->win);
 		perror(NULL);
 		exit(0);
 	}
@@ -54,6 +55,8 @@ int	main(int argc, char *argv[])
 	if (argc == 1)
 		return (fprintf(stderr, "usage: %s mfafiles...\n", argv[0]), 0);
 	mlx = mlx_init();
+	if (mlx == NULL)
+		return (fprintf(stderr, "failed mlx_init()\n"), 0);
 	vars.mlx = mlx;
 	vars.win = NULL;
 	vars.exit = false;
